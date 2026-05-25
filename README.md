@@ -75,7 +75,7 @@ you can install this plugin using your favourite package manager.
     "PaoloAlessio/dnd-generator.nvim",
     cmd = {"GenName", "GenNPC"}
     opts = {
-        mode = "offline",
+        mode = "offline", -- downloads from Open5e files into the cache to have faster Telescope
     }
 }
 ```
@@ -88,4 +88,10 @@ The plugin comes with the following default configuration
     cache_dir = vim.fn.stdpath("data") .. "/dnd_generator",
 }
 ```
-
+# RoadMap:
+- [x] Generates names `:GenName` 
+- [x] Generates NPCs `:GenNPC` 
+- [ ] Snippets for dnd
+- [ ] Open5e + Telescope
+- [ ] Random dices
+- [ ] generating directories workspace for campaing notes
