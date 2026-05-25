@@ -47,7 +47,7 @@ Generates a *Markdown* table of names from specified file:
 ``` cmd
 :GenName <path-to-file> [quantity]
 ```
-- `:GenName dwarf male 5` -> generate 5 male names for dwarfs
+- `:GenName dwarf male 5` -> generates 5 male names for dwarfs
 
 ### NPC Generator:
 Generates a simple NPC sheet in *Markdown*:
