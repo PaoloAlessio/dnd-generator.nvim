@@ -113,9 +113,10 @@ The plugin comes with the following default configuration
 
 #### Mesurment Unit:
 For *non-FreedomUnit-Users* like me, you can change the unit system:
-- for all "What in the name of God is a kilometer 🇺🇸🦅" people by default it will use the Freedom Unit since D&D uses it
+- for all *"What in the name of God is a kilometer 🇺🇸🦅"* people by default it will use the Freedom Unit since D&D uses it
 - for all the others you can choose between `unit = "m"` and `unit = "ft/m"`
->[!NOTE] the latter will display `15 ft. (4.5 m)`  
+>[!NOTE]
+>the latter will display `15 ft. (4.5 m)`  
 
 #### Offline mode:
 The plugin by default downloads inside the cache from **Open5e** the categories visited by the user,
