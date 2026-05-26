@@ -15,7 +15,7 @@ Adding names is extremely easy, you can just modify every file inside the folder
 Adding new species, sub-species, new files, is extremely easy and will be mapped automatically,
 you'll just need to create the respective folders and files
 
-For exemple, if you wanna add a new specie, let's say *Goliath* and their respective sub-specie
+For example, if you wanna add a new specie, let's say *Goliath* and their respective sub-specie
 *Cloud's Jaunt*, you can easily add the new folders in names:
 ```
 names
@@ -32,17 +32,17 @@ just by adding those folders, the system will work and also give you automatic
 suggestion while writing commands: `:GenName goliath clouds male 2`
 
 ### Autocompletion:
-By pressing `TAB` you can view at any moment suggestions to help you navigate between options
+By pressing `<TAB>` you can view at any moment suggestions to help you navigate between options
 
 ### DNDFind:
 you can use Telescope to search across **Open5e API** and by default download the cache to the pc to save time on future
 requests
 
 #### Zoom:
-when you want more informations you can hit enter on a selected element in Telescope to open a temporary buffer
+when you want more information you can hit `<Enter>` on a selected element in Telescope to open a temporary buffer
 
 #### Paste:
-when you want to save informations about a monster, spell, item... you can press <C-y> to paste the preview
+when you want to save information about a monster, spell, item... you can press `<C-y>` to paste the preview
 
 ## Commands:
 ### Name Generator:
@@ -80,10 +80,13 @@ Generates a simple NPC sheet in *Markdown*:
 ``` cmd
 :DNDFind <category>
 ```  
-opens Telescope to search between informations about dnd, hitting `TAB` shows valid categories
+opens Telescope to search between information about dnd, hitting `<TAB>` shows valid categories
 
 ### Clear cache:
-
+```cmd
+:DNDClearCache
+```
+this command empties the Cache directory
 
 ## Installation
 you can install this plugin using your favourite package manager.
@@ -125,6 +128,9 @@ but even small requests might take a few seconds
 - [x] Generates NPCs `:GenNPC` 
 - [ ] Snippets for dnd
 - [ ] Open5e + Telescope
+    - [x] cache clear
+    - [x] online only mode
+    - [ ] cache sync
     - [x] Monsters
     - [x] Spells
     - [x] rules
@@ -136,4 +142,4 @@ but even small requests might take a few seconds
     - [ ] magic items
     - [ ] HomeBrewing
 - [ ] Random dices
-- [ ] generating directories workspace for campaing notes
+- [ ] generating directories workspace for campaign notes
