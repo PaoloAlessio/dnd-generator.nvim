@@ -2,7 +2,20 @@ local M = {}
 local tree = require("dnd_generator.core.tree")
 local generator = require("dnd_generator.core.generator")
 local insert_in_buffer = require("dnd_generator.core.insert_in_buffer")
+local valid_DNDFind = {"magicitems", "weapons", "armor", "feats", "spells", "monsters", "sections", "conditions"}
 
+function M.valid_DNDFind()
+  return vim.deepcopy(valid_DNDFind)
+end
+
+function M.is_valid_DNDFind(element)
+  for _, valid in ipairs(valid_DNDFind) do
+    if valid == element then
+      return true
+    end
+  end
+  return false
+end
 
 local function get_options(dir)
   local options = {}
@@ -69,7 +82,9 @@ function M.cmd_complete_handler(ArgLead, CmdLine)
   if #suggestions == 0 then
     return {}
   end
-  return suggestions
+  return vim.tbl_filter(function(item)
+    return vim.startswith(item:lower(), ArgLead:lower())
+  end,suggestions)
 end
 
 local function get_quantity(args)

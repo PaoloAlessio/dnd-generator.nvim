@@ -34,6 +34,16 @@ suggestion while writing commands: `:GenName goliath clouds male 2`
 ### Autocompletion:
 By pressing `TAB` you can view at any moment suggestions to help you navigate between options
 
+### DNDFind:
+you can use Telescope to search across **Open5e API** and by default download the cache to the pc to save time on future
+requests
+
+#### Zoom:
+when you want more informations you can hit enter on a selected element in Telescope to open a temporary buffer
+
+#### Paste:
+when you want to save informations about a monster, spell, item... you can press <C-y> to paste the preview
+
 ## Commands:
 ### Name Generator:
 - `:GenName` 
@@ -66,6 +76,12 @@ Generates a simple NPC sheet in *Markdown*:
 - `:GenNPC male gith` -> chooses a random name for a male gith navigating through the subraces of giths
 - `:GenNPC human arabic female` -> Standard complete path, chooses a name from the file 
 
+### Opening DNDFind:
+``` cmd
+:DNDFind <category>
+```  
+opens Telescope to search between informations about dnd, hitting `TAB` shows valid categories
+
 ## Installation
 you can install this plugin using your favourite package manager.
 **Lazy.nvim**
@@ -73,9 +89,8 @@ you can install this plugin using your favourite package manager.
 
 {
     "PaoloAlessio/dnd-generator.nvim",
-    cmd = {"GenName", "GenNPC"}
+    event = "VeryLazy"
     opts = {
-        mode = "offline", -- downloads from Open5e files into the cache to have faster Telescope
     }
 }
 ```
@@ -86,8 +101,22 @@ The plugin comes with the following default configuration
 {
     mode = "offline", -- Choose between "offline" (local cache) or "online" (doesn't save from API)
     cache_dir = vim.fn.stdpath("data") .. "/dnd_generator",
+    unit = "m",
 }
 ```
+
+#### Mesurment Unit:
+For *non-FreedomUnit-Users* like me, you can change the unit system:
+- for all "What in the name of God is a kilometer 🇺🇸🦅" people by default it will use the Freedom Unit since D&D uses it
+- for all the others you can choose between `unit = "m"` and `unit = "ft/m"`
+>[!NOTE] the latter will display `15 ft. (4.5 m)`  
+
+#### Offline mode:
+The plugin by default downloads inside the cache from **Open5e** the categories visited by the user,
+if you want to disable this feature you can change `mode = "online"`, this way the plugin won't save the cache
+but even small requests might take a few seconds
+
+
 # RoadMap:
 - [x] Generates names `:GenName` 
 - [x] Generates NPCs `:GenNPC` 

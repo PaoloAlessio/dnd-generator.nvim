@@ -18,7 +18,7 @@ M.setup = function (opts)
   end
   if M.config.unit ~= "ft" and M.config.unit ~= "m" and M.config.unit ~= "ft/m" then
       M.config.unit = "ft"
-    end
+  end
 end
 
 

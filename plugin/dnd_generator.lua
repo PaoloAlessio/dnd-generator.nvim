@@ -17,3 +17,21 @@ end, {
   end
 })
 
+vim.api.nvim_create_user_command('DNDFind', function(opts)
+  local arg = opts.args
+  if require("dnd_generator.core.commands").is_valid_DNDFind(arg) then
+   require("dnd_generator.ui.telescope") .find(arg)
+  else
+    vim.notify("ERROR: " .. arg .. "is not a valid category", vim.log.levels.ERROR)
+  end
+end,{
+  nargs = 1,
+  complete = function(ArgLead, CmdLine)
+    local options = require("dnd_generator.core.commands").valid_DNDFind()
+
+    return vim.tbl_filter(function (item)
+      return vim.startswith(item, ArgLead)
+    end, options)
+  end
+})
+
