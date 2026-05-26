@@ -113,7 +113,8 @@ The plugin comes with the following default configuration
 
 #### Mesurment Unit:
 For *non-FreedomUnit-Users* like me, you can change the unit system:
-- for all *"What in the name of God is a kilometer 🇺🇸🦅"* people by default it will use the Freedom Unit since D&D uses it
+- for all *"What in the name of God is a kilometer 🇺🇸🦅"* people by default it will use the Freedom Unit since D&D,
+Wizzard of The Coast and Open5e use it
 - for all the others you can choose between `unit = "m"` and `unit = "ft/m"`
 >[!NOTE]
 >the latter will display `15 ft. (4.5 m)`  
