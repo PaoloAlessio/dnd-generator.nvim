@@ -2,7 +2,8 @@ local M = {}
 
 M.config = {
   mode = "offline",
-  cache_dir = vim.fn.stdpath("data") .. "/dnd_generator"
+  cache_dir = vim.fn.stdpath("data") .. "/dnd_generator",
+  unit = "ft"
 }
 
 M.setup = function (opts)
@@ -15,6 +16,9 @@ M.setup = function (opts)
       vim.fn.mkdir(M.config.cache_dir, "p")
     end
   end
+  if M.config.unit ~= "ft" and M.config.unit ~= "m" and M.config.unit ~= "ft/m" then
+      M.config.unit = "ft"
+    end
 end
 
 
