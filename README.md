@@ -93,5 +93,15 @@ The plugin comes with the following default configuration
 - [x] Generates NPCs `:GenNPC` 
 - [ ] Snippets for dnd
 - [ ] Open5e + Telescope
+    - [x] Monsters
+    - [x] Spells
+    - [x] rules
+    - [x] conditions
+    - [ ] races
+    - [ ] classes
+    - [ ] weapons
+    - [ ] armor
+    - [ ] magic items
+    - [ ] HomeBrewing
 - [ ] Random dices
 - [ ] generating directories workspace for campaing notes
