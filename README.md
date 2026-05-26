@@ -82,6 +82,9 @@ Generates a simple NPC sheet in *Markdown*:
 ```  
 opens Telescope to search between informations about dnd, hitting `TAB` shows valid categories
 
+### Clear cache:
+
+
 ## Installation
 you can install this plugin using your favourite package manager.
 **Lazy.nvim**

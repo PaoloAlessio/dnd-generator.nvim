@@ -8,6 +8,19 @@ function M.valid_DNDFind()
   return vim.deepcopy(valid_DNDFind)
 end
 
+function M.clear_cache()
+
+  local cache_dir = require("dnd_generator").config.cache_dir
+
+  if vim.fn.isdirectory(cache_dir) == 1 then
+    vim.fn.delete(cache_dir, "rf")
+    vim.mkdir(cache_dir, "p")
+    vim.notify("DnD Generator Cache emptied succesfully", vim.log.levels.INFO)
+  else
+    vim.notify("Cache directory not fount", vim.log.levels.WARN)
+  end
+end
+
 function M.is_valid_DNDFind(element)
   for _, valid in ipairs(valid_DNDFind) do
     if valid == element then
