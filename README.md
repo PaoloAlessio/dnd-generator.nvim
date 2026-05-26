@@ -139,9 +139,9 @@ but even small requests might take a few seconds
     - [x] conditions
     - [ ] races
     - [ ] classes
-    - [ ] weapons
-    - [ ] armor
-    - [ ] magic items
+    - [x] weapons
+    - [x] armor
+    - [x] magic items
     - [ ] HomeBrewing
 - [ ] Random dices
 - [ ] generating directories workspace for campaign notes

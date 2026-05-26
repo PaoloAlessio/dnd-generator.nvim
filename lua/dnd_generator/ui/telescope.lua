@@ -39,6 +39,12 @@ local function make_preview(endpoint, info)
       info.strength or 10, info.dexterity or 10, info.constitution or 10,
       info.intelligence or 10, info.wisdom or 10, info.charisma or 10))
     table.insert(lines, "")
+  table.insert(lines, "### Lore:")
+  local description = clean_text(info.description or info.desc)
+  for _, line in ipairs(description) do
+    table.insert(lines, convert.text(line))
+  end
+  return lines
 
   -- Spells:
   elseif endpoint == "spells" then
@@ -51,11 +57,11 @@ local function make_preview(endpoint, info)
     table.insert(lines, "**Components:** " .. (info.components or "")
     .. " | **Duration:** " .. (info.duration or ""))
     table.insert(lines, "**Materials:** " .. (info.material or ""))
-    if info.concentration == "yes" or info.require_concentration then 
+    if info.concentration == "yes" or info.requires_concentration then
       table.insert(lines, "⚠️ *Requires Concentration*")
     end
     table.insert(lines, "")
-  
+
   -- Rules and Conditions
   elseif endpoint == "sections" or endpoint == "conditions" then
     local description = clean_text(info.desc or info.description)
@@ -63,11 +69,66 @@ local function make_preview(endpoint, info)
       table.insert(lines, convert.text(line))
     end
     return lines
-  end
+  -- Magic Items
+  elseif endpoint == "magicitems" then
+    table.insert(lines, "**Type:** " .. (info.type or "")
+  .. " | **Rarity:** " .. (info.rarity or ""))
+    if  (info.requires_attunement or "") ~= "" then
+      table.insert(lines, "⚠️ *Requires Attunement*")     
+    end
+  -- Feats 
+  elseif endpoint== "feats" then
+    if type(info.prerequisite) == "string" then table.insert(lines, info.prerequisite) end
+    table.insert(lines, "")
+  -- weapon
+  elseif endpoint== "weapons" then
+    table.insert(lines, "**Category:** ".. (info.category or ""))
+    table.insert(lines, "**Cost:** ".. (info.cost or "")
+    .. " | **Weight:** ".. (info.weight or ""))
+    table.insert(lines, "**Damage Dice and Type:** ".. (info.damage_dice or "").. " " .. (info.damage_type or ""))
+    return lines
+  -- armor
+  elseif endpoint == "armor" then
+    local weight = (info.weight or "") ~= "" and info.weight or "---"
+    table.insert(lines, "**Category:** ".. (info.category or ""))
+    table.insert(lines, "**Cost:** ".. (info.cost or "") .. " | **Weight:** ".. weight)
+    table.insert(lines, "**Armor Class (AC):** " .. (info.ac_string or info.base_ac or "???" ))
+    if info.stealth_disadvantage then
+      table.insert(lines, "⚠️ *Stealth Disadvantage*")
+    end
+    return lines
+  elseif endpoint == "races" then
+    local speed = "30 ft."
+    if type(info.speed) == "table" and info.speed.walk then
+      speed = info.speed.walk .. "ft."
+    end
+    table.insert(lines,"**Size:** ".. (info.size_raw or "Madium").. " | **Speed:** ".. convert.text(speed))
+    table.insert(lines, "")
 
+    if(info.asi_desc or "") ~= "" then
+      table.insert(lines, info.asi_desc)
+    end
+
+    if (info.vision or "") ~= "" then
+      table.insert(lines, convert.text(info.vision))
+    end
+    if (info.languages or "") ~= "" then
+      table.insert(lines, info.languages)
+    end
+
+    if (info.traits or "") ~= "" then
+      table.insert(lines, "")
+      table.insert(lines, "### Racial Traits:")
+      local traits = clean_text(info.traits)
+      for _, line in ipairs(traits) do 
+        table.insert(lines, convert.text(line))
+      end
+    end
+    return lines
+  end
   -- General
   table.insert(lines, "### Description / Effects:")
-  local description = clean_text(info.description or info.desc)
+  local description = clean_text(info.effect_desc or info.description or info.desc)
   for _, line in ipairs(description) do
     table.insert(lines, convert.text(line))
   end
@@ -94,7 +155,7 @@ local function make_buffer(endpoint, info)
     table.insert(lines, "**Components:** " .. (info.components or "")
     .. " | **Duration:** " .. (info.duration or ""))
     table.insert(lines, "**Materials:** " .. (info.material or ""))
-    if info.concentration == "yes" or info.require_concentration then 
+    if info.concentration == "yes" or info.requires_concentration then 
       table.insert(lines, "⚠️ *Requires Concentration*")
     end
     table.insert(lines, "**Can be cast as a Ritual:** "  .. (info.ritual or ""))
@@ -108,6 +169,7 @@ local function make_buffer(endpoint, info)
       table.insert(lines, convert.text(line))
     end
     return lines
+
   -- Monsters
   elseif endpoint == "monsters" then
     table.insert(lines,"**Size/Type:** "
@@ -134,12 +196,14 @@ local function make_buffer(endpoint, info)
       table.insert(lines, "**Speed:** " .. convert.text("0 ft."))
     end
     table.insert(lines, "")
+
     -- Stats
     table.insert(lines, "### Stats:")
     table.insert(lines, string.format("| STR: %d | DEX: %d | CON: %d | INT: %d | WIS: %d | CHA: %d |",
       info.strength or 10, info.dexterity or 10, info.constitution or 10,
       info.intelligence or 10, info.wisdom or 10, info.charisma or 10))
     table.insert(lines, "")
+
     -- Saves
     local saves = {}
     if type(info.strength_save) == "number" then table.insert(saves, "Str +" .. info.strength_save) end
@@ -151,11 +215,11 @@ local function make_buffer(endpoint, info)
     if #saves > 0 then
       table.insert(lines, "**Saving Throws:** " .. table.concat(saves, ", "))
     end
+
     -- Skills
     if type(info.skills) == "table" then
       local skill_list = {}
       for skill, bonus in pairs(info.skills) do
-        -- Capitalizziamo la prima lettera della skill per eleganza
         local skill_name = skill:gsub("^%l", string.upper)
         table.insert(skill_list, skill_name .. " +" .. bonus)
       end
@@ -163,6 +227,7 @@ local function make_buffer(endpoint, info)
         table.insert(lines, "**Skills:** " .. table.concat(skill_list, ", "))
       end
     end
+
     -- Resistances and Immunities
     if (info.damage_vulnerabilities or "") ~= "" then
       table.insert(lines, "**Damage Vulnerabilities:** " .. info.damage_vulnerabilities)
@@ -185,8 +250,10 @@ local function make_buffer(endpoint, info)
     else
       table.insert(lines, "**Languages: -**")
     end
+
     -- Fight
     table.insert(lines, "## Fight:")
+
     -- Special Abilities
     if type(info.special_abilities) == "table" and #info.special_abilities > 0 then
       table.insert(lines, "### Special Traits")
@@ -233,6 +300,73 @@ local function make_buffer(endpoint, info)
         table.insert(lines, convert.text(line))
       end
     end
+    return lines
+
+  -- Magic Items
+  elseif endpoint == "magicitems" then
+    table.insert(lines, "**Type:** " .. (info.type or "")
+  .. " | **Rarity:** " .. (info.rarity or ""))
+    if  (info.requires_attunement or "") ~= "" then
+      table.insert(lines, "⚠️ *Requires Attunement*")     
+    end
+    local description = clean_text(info.desc or info.description)
+    for _, line in  ipairs(description) do
+      table.insert(lines, convert.text(line))
+    end
+    return lines
+
+  -- Feats 
+  elseif endpoint== "feats" then
+    if type(info.prerequisite) == "string" then table.insert(lines, info.prerequisite) end
+    if (info.effect_desc or "") ~= "" then
+        table.insert(lines, "## Effect Description:")
+      local description = clean_text(info.effect_desc)
+      for _, line in  ipairs(description) do
+        table.insert(lines, convert.text(line))
+      end
+    end
+    if (info.desc or "") ~= "" or (info.description or "") ~= "" then
+      local description = clean_text(info.desc or info.description)
+      for _, line in  ipairs(description) do
+        table.insert(lines, convert.text(line))
+      end
+    end
+    return lines
+
+  --weapons
+  elseif endpoint== "weapons" then
+    table.insert(lines, "**Category:** ".. (info.category or ""))
+    table.insert(lines, "**Cost:** ".. (info.cost or "")
+    .. " | **Weight:** ".. (info.weight or ""))
+    table.insert(lines, "**Damage Dice and Type:** ".. (info.damage_dice or "").. " " .. (info.damage_type or ""))
+    local Properties = {}
+    if type(info.properties) == "table" then
+      for _, property in ipairs(info.properties) do
+        table.insert(Properties, property)
+      end
+      table.insert(lines, "**Properties:** " .. table.concat(Properties, ", "))
+    end
+    return lines 
+
+  -- armor
+  elseif endpoint == "armor" then
+    local weight = (info.weight or "") ~= "" and info.weight or "---"
+    table.insert(lines, "**Category:** ".. (info.category or ""))
+    table.insert(lines, "**Cost:** ".. (info.cost or "") .. " | **Weight:** ".. weight)
+    table.insert(lines, "**Armor Class (AC):** " .. (info.ac_string or info.base_ac or "???" ))
+    if info.stealth_disadvantage then
+      table.insert(lines, "⚠️ *Stealth Disadvantage*")
+    end
+    if type(info.strength_requirement) == "number" then
+      table.insert(lines, "**Strength Requirement:** Str " .. info.strength_requirement)
+    end
+    
+    if info.stealth_disadvantage == true then
+      table.insert(lines, "⚠️ *Stealth Disadvantage*")
+    else
+      table.insert(lines, "🥷 *No Stealth Disadvantage*")
+    end
+    
     return lines
 
   -- Rules and Conditions
