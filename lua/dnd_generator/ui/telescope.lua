@@ -97,6 +97,7 @@ local function make_preview(endpoint, info)
       table.insert(lines, "⚠️ *Stealth Disadvantage*")
     end
     return lines
+  -- races
   elseif endpoint == "races" then
     local speed = "30 ft."
     if type(info.speed) == "table" and info.speed.walk then
@@ -125,7 +126,30 @@ local function make_preview(endpoint, info)
       end
     end
     return lines
+
+  -- Classes
+  elseif endpoint=="classes" then
+    table.insert(lines, "**Hit Dice:**" .. (info.hit_dice or ""))
+    table.insert(lines, "**HP at 1st Level:** " .. (info.hp_at_1st_level or ""))
+    table.insert(lines, "**Saving Throws:** " .. (info.prof_saving_throws or ""))
+
+    if (info.spellcasting_ability or "")~="" then
+      table.insert(lines, "**spellcasting Ability:** " .. info.spellcasting_ability)
+    end
+
+    table.insert(lines, "")
+    table.insert(lines, "### Proficiencies: ")
+    table.insert(lines, "- **Armor:** ".. (info.prof_armor or "None"))
+    table.insert(lines, "- **Weapons:** ".. (info.prof_weapons or "None"))
+
+    if (info.subtypes_name or "") ~= "" then
+      table.insert(lines, "")
+      table.insert(lines, "**Subclasses:** " .. info.subtypes_name)
+    end
+
+    return lines
   end
+
   -- General
   table.insert(lines, "### Description / Effects:")
   local description = clean_text(info.effect_desc or info.description or info.desc)
@@ -147,7 +171,7 @@ local function make_buffer(endpoint, info)
     .. (info.level or "Cantrip")
     .. " | **School:** " .. (info.school or ""))
     if (info.higher_level or "") ~= "" then
-      table.insert(lines, "**Hiher level**: " .. info.higher_level)
+      table.insert(lines, "**Higher level**: " .. info.higher_level)
     end
     table.insert(lines, "**Casting Time:** "
     .. (info.casting_time or "")
@@ -293,7 +317,7 @@ local function make_buffer(endpoint, info)
     end
 
     -- Lore
-    if (info.description or info.desc) ~= "" then 
+    if (info.description or info.desc) ~= "" then
       table.insert(lines, "## Lore:")
       local description = clean_text(info.description or info.desc)
       for _, line in ipairs(description) do
@@ -307,7 +331,7 @@ local function make_buffer(endpoint, info)
     table.insert(lines, "**Type:** " .. (info.type or "")
   .. " | **Rarity:** " .. (info.rarity or ""))
     if  (info.requires_attunement or "") ~= "" then
-      table.insert(lines, "⚠️ *Requires Attunement*")     
+      table.insert(lines, "⚠️ *Requires Attunement*")
     end
     local description = clean_text(info.desc or info.description)
     for _, line in  ipairs(description) do
@@ -346,7 +370,7 @@ local function make_buffer(endpoint, info)
       end
       table.insert(lines, "**Properties:** " .. table.concat(Properties, ", "))
     end
-    return lines 
+    return lines
 
   -- armor
   elseif endpoint == "armor" then
@@ -360,13 +384,13 @@ local function make_buffer(endpoint, info)
     if type(info.strength_requirement) == "number" then
       table.insert(lines, "**Strength Requirement:** Str " .. info.strength_requirement)
     end
-    
+
     if info.stealth_disadvantage == true then
       table.insert(lines, "⚠️ *Stealth Disadvantage*")
     else
       table.insert(lines, "🥷 *No Stealth Disadvantage*")
     end
-    
+
     return lines
 
   -- Rules and Conditions
@@ -375,6 +399,142 @@ local function make_buffer(endpoint, info)
     for _, line in  ipairs(description) do
       table.insert(lines, convert.text(line))
     end
+    return lines
+  -- races
+  elseif endpoint == "races" then
+    if (info.asi_desc or "" ) ~= "" then table.insert(lines, info.asi_desc) end
+    if (info.size or "" ) ~= "" then table.insert(lines, info.size) end
+    if (info.speed_desc or "" ) ~= "" then table.insert(lines, info.speed_desc) end
+    if (info.vision or "" ) ~= "" then table.insert(lines, info.vision) end
+    if (info.languages or "" ) ~= "" then table.insert(lines, info.languages) end
+
+    table.insert(lines, "")
+    table.insert(lines, "## Lore & Details:")
+    if (info.age or "" ) ~= "" then table.insert(lines, info.age) end
+    if (info.alignment or "" ) ~= "" then table.insert(lines, info.alignment) end
+
+    -- Description
+    if (info.desc or "") ~= "" then
+      table.insert(lines, "")
+      local description = clean_text(info.desc)
+      for _, line in ipairs(description) do
+        table.insert(lines, line)
+      end
+    end
+
+    if type(info.subraces) == "table" and #info.subraces > 0 then
+      table.insert(lines, "")
+      table.insert(lines, "## Subraces:")
+
+      for _, subrace in ipairs(info.subraces) do
+        table.insert(lines, "### "..subrace.name)
+
+        if (subrace.asi_desc or "") ~= "" then
+          table.insert(lines, subrace.asi_desc)
+        end
+
+        if (subrace.desc or "") ~= "" then
+          local sub_desc = clean_text(subrace.desc)
+          for _, line in ipairs(sub_desc) do
+            table.insert(lines, line)
+          end
+        end
+
+        if (subrace.traits or "") ~= "" then
+          table.insert(lines, "**Subrace Traits:**")
+          local sub_traits = clean_text(subrace.traits)
+          for _, line in ipairs(sub_traits) do
+            table.insert(lines, convert.text(line))
+          end
+        end
+
+        if (subrace.document__title or "") ~= "" then
+          table.insert(lines, "")
+          table.insert(lines, "*Source Subrace: " .. subrace.document__title .. "*")
+        end
+
+        table.insert(lines, "---")
+      end
+    end
+
+    if (info.document__title or "") ~= "" then
+      table.insert(lines, "")
+      table.insert(lines, "*Source Race: " .. info.document__title .. "*")
+    end
+    return lines
+
+  -- Classes
+  elseif endpoint == "classes" then
+    -- HP
+    table.insert(lines, "### Hit Points")
+    table.insert(lines, "**Hit Dice:** " ..  (info.hit_dice or ""))
+    table.insert(lines, "**HP at 1st Level:** " ..  (info.hp_at_1st_level or ""))
+    table.insert(lines, "**HP at Higher Levels:** " ..  (info.hp_at_1st_level or ""))
+    table.insert(lines, "")
+
+    -- Proficiencies
+    table.insert(lines, "### Proficiencies")
+    table.insert(lines, "**Armor:** " .. (info.prof_armor or "None"))
+    table.insert(lines, "**Weapons:** " .. (info.prof_weapons or "None"))
+    table.insert(lines, "**Tools:** " .. (info.prof_tools or "None"))
+    table.insert(lines, "**Saving Throws:** " .. (info.prof_saving_throws or "None"))
+    table.insert(lines, "**Skills:** " .. (info.prof_skills or "None"))
+    table.insert(lines, "")
+
+    -- Equipment
+    if (info.equipment or "") ~= "" then
+      table.insert(lines, "### Equipment")
+      local  equip = clean_text(info.equipment)
+      for _, line in ipairs(equip) do
+        table.insert(lines, convert.text(line))
+      end
+      table.insert(lines, "")
+    end
+
+    -- Class Progression Table 
+    if (info.table or "") ~= "" then
+      table.insert(lines, "### Class Progression")
+      local class_table = clean_text(info.table)
+      for _, line in ipairs(class_table) do
+        table.insert(lines, convert.text(line))
+      end
+      table.insert(lines, "")
+    end
+
+    -- Description and Priviledges
+    if (info.desc or "") ~= "" then
+      table.insert(lines, "### Class Features")
+      local desc = clean_text(info.desc)
+      for _,line in ipairs(desc) do
+        table.insert(lines, convert.text(line))
+      end
+      table.insert(lines, "")
+    end
+
+    -- Subclasses
+    if type(info.archetypes) == "table" and #info.archetypes > 0 then
+      table.insert(lines, "## "..(info.subtypes_name or "Archetypes"))
+      for _, subclass in ipairs(info.archetypes) do
+        table.insert(lines, "### ".. subclass.name)
+        local subclass_desc = clean_text(subclass.desc)
+        for _, line in ipairs(subclass_desc) do
+          table.insert(lines, convert.text(line))
+        end
+
+        if (subclass.document__title or "") ~= "" then
+          table.insert(lines, "")
+          table.insert(lines, "*Source Subclass: " .. subclass.document__title .. "*")
+        end
+        table.insert(lines, "---")
+      end
+    end
+
+    if (info.document__title or "") ~= "" then
+      table.insert(lines, "")
+      table.insert(lines, "*Source Class: " .. info.document__title .. "*")
+    end
+
+
     return lines
   end
 end
@@ -398,7 +558,7 @@ function M.find(endpoint)
 
       previewer = previewers.new_buffer_previewer({
         title = "Preview",
-        define_preview = function(self, entry, status)
+        define_preview = function(self, entry, _)
           local info = entry.value
           local lines = make_preview(endpoint, info)
           vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines)
@@ -428,7 +588,6 @@ function M.find(endpoint)
             local lines = make_preview(endpoint, selection.value)
 
             actions.close(prompt_bufnr)
-            
             vim.api.nvim_put(lines, "l", true, true)
           end)
         return true

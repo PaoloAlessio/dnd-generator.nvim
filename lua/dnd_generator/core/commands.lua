@@ -2,7 +2,8 @@ local M = {}
 local tree = require("dnd_generator.core.tree")
 local generator = require("dnd_generator.core.generator")
 local insert_in_buffer = require("dnd_generator.core.insert_in_buffer")
-local valid_DNDFind = {"magicitems", "weapons", "armor", "feats", "spells", "monsters", "sections", "conditions"}
+local valid_DNDFind = {"magicitems", "weapons", "armor", "feats", "spells",
+                      "monsters", "sections", "conditions", "races", "classes"}
 
 function M.valid_DNDFind()
   return vim.deepcopy(valid_DNDFind)

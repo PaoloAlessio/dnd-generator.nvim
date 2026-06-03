@@ -137,8 +137,8 @@ but even small requests might take a few seconds
     - [x] Spells
     - [x] rules
     - [x] conditions
-    - [ ] races
-    - [ ] classes
+    - [x] races
+    - [x] classes
     - [x] weapons
     - [x] armor
     - [x] magic items
