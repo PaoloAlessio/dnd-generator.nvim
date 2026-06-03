@@ -38,7 +38,7 @@ function M.get_data(endpoint, callback)
   end
 
   vim.notify("Download database '" .. endpoint .. "' from Open5e... Could take a few seconds", vim.log.levels.INFO)
-  
+
   local all_results = {}
   local current_url = "https://api.open5e.com/v1/" .. endpoint .. "/?limit=100"
 
@@ -48,26 +48,40 @@ function M.get_data(endpoint, callback)
         vim.schedule(function()
           if response.status ~= 200 then
             vim.notify("ERROR API Open5e: code " .. response.status, vim.log.levels.ERROR)
+            callback({})
             return
           end
 
-          local data = vim.json.decode(response.body)
-          
-          for _, item in ipairs(data.results) do
-            table.insert(all_results, item)
+          local ok, data = pcall(vim.json.decode, response.body)
+          if not ok then 
+            vim.notify("ERROR API Open5e: invalid JSON format for " .. endpoint, vim.log.levels.ERROR)
+            callback({})
+            return
           end
 
-          if data.next and data.next ~= vim.NIL then
+          if data.results then
+            for _, item in ipairs(data.results) do
+              table.insert(all_results, item)
+            end
+          end
+
+          if data.next and data.next ~= vim.NIL and data.next ~= "" then
             current_url = data.next
             fetch_next()
           else
-            vim.notify("Download completed: " .. #all_results .. " elements found", vim.log.levels.INFO)
-            
-            if config.mode == "offline" then
-              save_to_cache(filename, all_results)
+
+            if #all_results > 0 then
+
+              vim.notify("Download completed: " .. #all_results .. " " .. endpoint .. "  found", vim.log.levels.INFO)
+
+              if config.mode == "offline" then
+                save_to_cache(filename, all_results)
+              end
             end
+
             callback(all_results)
           end
+
         end)
       end
     })

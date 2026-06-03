@@ -38,3 +38,7 @@ end,{
 vim.api.nvim_create_user_command('DNDClearCache', function ()
   require("dnd_generator.core.commands").clear_cache()
 end, {})
+
+vim.api.nvim_create_user_command('DNDSyncCache', function ()
+  require("dnd_generator.core.commands").sync_cache()
+end, {})

@@ -88,6 +88,12 @@ opens Telescope to search between information about dnd, hitting `<TAB>` shows v
 ```
 this command empties the Cache directory
 
+### Sync Cache:
+``` cmd
+:DNDSyncCache
+```
+This command empties and repopulate the Cache directory with all the `.json` file from **Open5e**
+
 ## Installation
 you can install this plugin using your favourite package manager.
 **Lazy.nvim**
@@ -130,9 +136,9 @@ but even small requests might take a few seconds
 - [x] Generates NPCs `:GenNPC` 
 - [ ] Snippets for dnd
 - [ ] Open5e + Telescope
-    - [x] cache clear
+    - [x] cache clear `:DNDClearCache`
     - [x] online only mode
-    - [ ] cache sync
+    - [x] cache sync `:DNDSyncCache`
     - [x] Monsters
     - [x] Spells
     - [x] rules

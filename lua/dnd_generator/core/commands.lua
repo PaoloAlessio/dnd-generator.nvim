@@ -15,10 +15,36 @@ function M.clear_cache()
 
   if vim.fn.isdirectory(cache_dir) == 1 then
     vim.fn.delete(cache_dir, "rf")
-    vim.mkdir(cache_dir, "p")
-    vim.notify("DnD Generator Cache emptied succesfully", vim.log.levels.INFO)
+    vim.fn.mkdir(cache_dir, "p")
+    vim.notify("DnD Generator Cache emptied successfully", vim.log.levels.INFO)
   else
     vim.notify("Cache directory not fount", vim.log.levels.WARN)
+  end
+end
+
+function M.sync_cache()
+  M.clear_cache()
+
+  vim.notify("DND Generator: Start syncing data from Open5e in background...", vim.log.levels.INFO)
+  local completed = 0
+  local total = #valid_DNDFind
+
+  if total == 0 then return end
+
+  local client = require("dnd_generator.open5e.client")
+
+  for _, endpoint in ipairs(valid_DNDFind) do
+    client.get_data(endpoint, function ()
+      vim.schedule(function()
+
+        completed = completed +1
+
+        if completed == total then
+          vim.notify("DND Generator: Synchronization completed successfully!", vim.log.levels.INFO)
+        end
+      end)
+
+    end)
   end
 end
 
