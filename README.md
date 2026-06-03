@@ -101,8 +101,13 @@ you can install this plugin using your favourite package manager.
 
 {
     "PaoloAlessio/dnd-generator.nvim",
-    event = "VeryLazy"
+    event = "VeryLazy",
+    dependencies = {
+        "nvim-lua/plenary.nvim",
+        "nvim-telescope/telescope.nvim"
+    }
     opts = {
+        -- Configuration here
     }
 }
 ```
@@ -112,8 +117,12 @@ The plugin comes with the following default configuration
 ```lua
 {
     mode = "offline", -- Choose between "offline" (local cache) or "online" (doesn't save from API)
-    cache_dir = vim.fn.stdpath("data") .. "/dnd_generator",
-    unit = "m",
+    cache_dir = vim.fn.stdpath("cache") .. "/dnd_generator/open5e",
+    homebrew_dir = vim.fn.stdpath("data") .. "/dnd_generator/homebrew",
+    names_dir = vim.fn.stdpath("data") .. "/dnd_generator/names",
+    unit = "ft", -- Choose between "m", "ft", "ft/m"
+    lua_homebrew = false, -- By default
+    default_names = true, -- By defaylt generate a short list of names and files in the folder of the names
 }
 ```
 
@@ -130,12 +139,19 @@ The plugin by default downloads inside the cache from **Open5e** the categories 
 if you want to disable this feature you can change `mode = "online"`, this way the plugin won't save the cache
 but even small requests might take a few seconds
 
+#### Homebrew in lua:
+By setting it to `lua_homebrew = true` the plugin can read from `.lua` files
+
+>[!CAUTION]
+> BEWARE of what you download: `.lua` files are compiled, so it could contain malicious code,
+> always prefere `.json` files
+
 
 # RoadMap:
 - [x] Generates names `:GenName` 
 - [x] Generates NPCs `:GenNPC` 
 - [ ] Snippets for dnd
-- [ ] Open5e + Telescope
+- [x] Open5e + Telescope
     - [x] cache clear `:DNDClearCache`
     - [x] online only mode
     - [x] cache sync `:DNDSyncCache`
@@ -148,6 +164,9 @@ but even small requests might take a few seconds
     - [x] weapons
     - [x] armor
     - [x] magic items
-    - [ ] HomeBrewing
+    - [x] HomeBcewing
 - [ ] Random dices
 - [ ] generating directories workspace for campaign notes
+
+## License:
+This software 

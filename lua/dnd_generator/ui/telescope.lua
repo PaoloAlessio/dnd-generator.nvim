@@ -540,12 +540,12 @@ local function make_buffer(endpoint, info)
 end
 
 function M.find(endpoint)
-  client.get_data(endpoint, function(items)
+  client.get_data(endpoint, function(api_items)
     pickers.new({}, {
       prompt_title = "D&D 5e - " .. endpoint:gsub("^%l", string.upper),
 
       finder = finders.new_table({
-        results = items,
+        results = require("dnd_generator.core.homebrew").merge_data(endpoint, api_items),
         entry_maker = function(entry)
           return {
             value = entry,

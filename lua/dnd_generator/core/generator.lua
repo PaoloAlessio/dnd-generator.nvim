@@ -1,6 +1,6 @@
 local M = {}
 
-local file_names_list = { "child", "names", "male", "female" }
+local file_names_list = require("dnd_generator.init").config.names_files
 
 function M.is_valid_file_name(name)
 	for index in ipairs(file_names_list) do

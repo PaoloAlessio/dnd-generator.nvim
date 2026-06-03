@@ -1,9 +1,7 @@
 local M = {}
 
 local tree_cache = nil
-local name_path = debug.getinfo(1, "S").source:sub(2)
-name_path = vim.fn.fnamemodify(name_path, ":h:h:h:h")
-name_path = name_path .. "/data/names"
+local name_path = require("dnd_generator.init").config.names_dir
 
 local function load_tree(dir_path)
   local tree = {}
