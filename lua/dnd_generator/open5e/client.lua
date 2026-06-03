@@ -53,7 +53,7 @@ function M.get_data(endpoint, callback)
           end
 
           local ok, data = pcall(vim.json.decode, response.body)
-          if not ok then 
+          if not ok then
             vim.notify("ERROR API Open5e: invalid JSON format for " .. endpoint, vim.log.levels.ERROR)
             callback({})
             return
