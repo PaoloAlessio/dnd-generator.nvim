@@ -49,6 +49,10 @@ M.setup = function (opts)
 
   M.config = vim.tbl_deep_extend("force", M.config, opts)
 
+  M.config.cache_dir = vim.fn.expand(M.config.cache_dir)
+  M.config.homebrew_dir = vim.fn.expand(M.config.homebrew_dir)
+  M.config.names_dir = vim.fn.expand(M.config.names_dir)
+
   if M.config.mode == "offline" then
     if vim.fn.isdirectory(M.config.cache_dir) == 0 then
       vim.fn.mkdir(M.config.cache_dir, "p")

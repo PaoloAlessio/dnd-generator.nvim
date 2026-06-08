@@ -5,7 +5,8 @@
 
 ## Introduction
 this plugin aim is to **generate** random NPC names, sorted by species, sub-species, sex and more.
-It contains the names from *Xanathar's Guide to Everything*
+By default, it comes with a small list of fantasy and historical names, but it's designed to let
+you easily plug in yout own custom `.txt` lists!
 
 ## Features:
 ### Adding names:
@@ -15,7 +16,7 @@ Adding names is extremely easy, you can just modify every file inside the folder
 Adding new species, sub-species, new files, is extremely easy and will be mapped automatically,
 you'll just need to create the respective folders and files
 
-For example, if you wanna add a new specie, let's say *Goliath* and their respective sub-specie
+For example, if you wanna add a new species, let's say *Goliath* and their respective sub-species
 *Cloud's Jaunt*, you can easily add the new folders in names:
 ```
 names
@@ -37,6 +38,28 @@ By pressing `<TAB>` you can view at any moment suggestions to help you navigate 
 ### DNDFind:
 you can use Telescope to search across **Open5e API** and by default download the cache to the pc to save time on future
 requests
+
+#### Semantic Search:
+The Telescope integrations allows semantic filtering: while searching you can type specific keywords to filter results.
+
+##### Examples:
+- In **monsters**: `cr 5` to see Challenge Rating 5 monsters, `large` for see large size monsters...
+- In **spells**: type `cantrip`...
+- In **weapons**: type `slashing` or `martial`...
+
+### Custom Homebrew:
+You can easily integrate your own custom campaigns, monsters, items, classes and much more:
+Simply drop a `.json` file containing your data into the corresponding folder.
+The plugin will automatically parse it and show it in Telescope, marking it with a special icon.
+
+By typing `homebrew` inside Telescope you can filter to view your custom content
+
+### Want to use official D&D content?
+Due to copyright reasons, this plugin only ships with open-source and SDR content. However the tool is entirely
+yours! You're highly encouraged to transcribe your favourite *names*, *monsters*, *subclasses* and much more in your
+local `.txt`, `.json` or `.lua` files from the rulebooks you own.
+Just drop them in the correct local `names` or `homebrew` directories and they'll be seamlessly 
+integrated for you to use.
 
 #### Zoom:
 when you want more information you can hit `<Enter>` on a selected element in Telescope to open a temporary buffer
@@ -98,14 +121,13 @@ This command empties and repopulate the Cache directory with all the `.json` fil
 you can install this plugin using your favourite package manager.
 **Lazy.nvim**
 ```lua
-
 {
     "PaoloAlessio/dnd-generator.nvim",
     event = "VeryLazy",
     dependencies = {
         "nvim-lua/plenary.nvim",
         "nvim-telescope/telescope.nvim"
-    }
+    },
     opts = {
         -- Configuration here
     }
@@ -113,7 +135,11 @@ you can install this plugin using your favourite package manager.
 ```
 
 ### Configuration:
-The plugin comes with the following default configuration
+The plugin comes with the following default ## Contributing
+Pull requests are welcome! If you want to add new name lists, features or fix bugs, feel free to open an issue or submit a PR.
+
+## License
+Distributed under the MIT License. See `LICENSE` for more information.configuration
 ```lua
 {
     mode = "offline", -- Choose between "offline" (local cache) or "online" (doesn't save from API)
@@ -122,15 +148,17 @@ The plugin comes with the following default configuration
     names_dir = vim.fn.stdpath("data") .. "/dnd_generator/names",
     unit = "ft", -- Choose between "m", "ft", "ft/m"
     lua_homebrew = false, -- By default
-    default_names = true, -- By defaylt generate a short list of names and files in the folder of the names
+    default_names = true, -- By default generate a short list of names and files in the folder of the names
     names_files = { "child", "names", "male", "female" }, -- files from where the program expectes to find the names
+    homebrew_icon = "", -- icon for homebrew files
+    classic_icon = "󰗪", -- icon for files from Open5e
 }
 ```
 
-#### Mesurment Unit:
+#### Measurement Unit:
 For *non-FreedomUnit-Users* like me, you can change the unit system:
 - for all *"What in the name of God is a kilometer 🇺🇸🦅"* people by default it will use the Freedom Unit since D&D,
-Wizzard of The Coast and Open5e use it
+Wizards of The Coast and Open5e use it
 - for all the others you can choose between `unit = "m"` and `unit = "ft/m"`
 >[!NOTE]
 >the latter will display `15 ft. (4.5 m)`
@@ -145,7 +173,8 @@ By setting it to `lua_homebrew = true` the plugin can read from `.lua` files
 
 >[!CAUTION]
 > BEWARE of what you download: `.lua` files are compiled, so it could contain malicious code,
-> always prefere `.json` files
+> always prefer `.json` files
+
 
 #### Names files:
 The plugin expectes to find the names of the NPCs in the `.txt` files named after the content of the
@@ -169,7 +198,12 @@ table `names_files`, so it'll look for files such as `female.txt`, `male.txt`, `
     - [x] weapons
     - [x] armor
     - [x] magic items
-    - [x] HomeBcewing
+    - [x] HomeBrewing
 - [ ] Random dices
 - [ ] generating directories workspace for campaign notes
 
+## Contributing
+Pull requests are welcome! If you want to add new name lists, features or fix bugs, feel free to open an issue or submit a PR.
+
+## License
+Distributed under the MIT License. See `LICENSE` for more information.
