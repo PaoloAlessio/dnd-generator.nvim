@@ -74,7 +74,7 @@ local function make_preview(endpoint, info)
     table.insert(lines, "**Type:** " .. (info.type or "")
   .. " | **Rarity:** " .. (info.rarity or ""))
     if  (info.requires_attunement or "") ~= "" then
-      table.insert(lines, "⚠️ *Requires Attunement*")     
+      table.insert(lines, "⚠️ *Requires Attunement*")
     end
   -- Feats 
   elseif endpoint== "feats" then
@@ -121,7 +121,7 @@ local function make_preview(endpoint, info)
       table.insert(lines, "")
       table.insert(lines, "### Racial Traits:")
       local traits = clean_text(info.traits)
-      for _, line in ipairs(traits) do 
+      for _, line in ipairs(traits) do
         table.insert(lines, convert.text(line))
       end
     end
@@ -179,7 +179,7 @@ local function make_buffer(endpoint, info)
     table.insert(lines, "**Components:** " .. (info.components or "")
     .. " | **Duration:** " .. (info.duration or ""))
     table.insert(lines, "**Materials:** " .. (info.material or ""))
-    if info.concentration == "yes" or info.requires_concentration then 
+    if info.concentration == "yes" or info.requires_concentration then
       table.insert(lines, "⚠️ *Requires Concentration*")
     end
     table.insert(lines, "**Can be cast as a Ritual:** "  .. (info.ritual or ""))
@@ -199,7 +199,7 @@ local function make_buffer(endpoint, info)
     table.insert(lines,"**Size/Type:** "
     .. (info.size or "") .. " "
     .. (info.type or "") .. " "
-    .. (info.subtype or "")) 
+    .. (info.subtype or ""))
     table.insert(lines,"**Alignment:** ".. (info.alignment or ""))
     table.insert(lines, "**Challenge Rating (CR):** " .. (info.challenge_rating or ""))
     -- Armor class
@@ -539,6 +539,75 @@ local function make_buffer(endpoint, info)
   end
 end
 
+local function entry_marker_function(entry, endpoint)
+  local display_text = entry.name
+  local search_text = entry.name
+
+  if endpoint == "monsters" then
+    local cr = entry.challenge_rating or "?"
+    local type = entry.type or ""
+    local size = entry.size or ""
+    display_text = string.format("%s [CR: %s | %s]", entry.name, cr, type)
+    search_text = string.format("%s cr %s %s %s ", entry.name, cr, type, size)
+
+  elseif endpoint == "spells" then
+    local level = entry.level or "Cantrip"
+    local school = entry.school or ""
+    local classes = entry.dnd_class or ""
+    display_text = string.format("%s [%s | %s]", entry.name, level, school)
+    search_text = string.format("%s lvl %s %s %s", entry.name, level, school, classes)
+
+  elseif endpoint == "magicitems" then
+    local rarity = entry.rarity or "Unknown"
+    local item_type = entry.type or ""
+    local attunement =  (entry.requires_attunement and  entry.requires_attunement ~= "") and "attunment" or ""
+    display_text = string.format("%s [%s | %s]", entry.name, rarity, item_type)
+    search_text = string.format("%s %s %s %s", entry.name, rarity, item_type, attunement)
+
+  elseif endpoint == "weapons" then
+    local category = entry.category or ""
+    local dmg_type = entry.damage_type or ""
+    display_text = string.format("%s [%s | %s]", entry.name, category, dmg_type)
+    search_text = string.format("%s %s %s", entry.name, category, dmg_type)
+
+  elseif endpoint == "armor" then
+    local category = entry.category or ""
+    local ac = entry.ac_string or entry.base_ac or ""
+    local stealth =  entry.stealth_disadvantage and "noisy" or "stealth"
+    display_text = string.format("%s [AC: %s | %s]", entry.name, ac, category)
+    search_text = string.format("%s ac %s %s %s", entry.name, ac, category, stealth)
+
+  elseif endpoint == "classes" then
+    local hd = entry.hit_dice or ""
+    display_text = string.format("%s [HD: %s]", entry.name, hd)
+    search_text = string.format("%s hd %s", entry.name, hd)
+
+  elseif endpoint == "races" then
+    local size = entry.size_raw or entry.size or ""
+    search_text = string.format("%s %s", entry.name, size)
+
+  elseif endpoint == "feats" then
+    local prereq = (entry.prerequisite and entry.prerequisite ~= "") and "prerequisite" or ""
+    search_text = string.format("%s %s", entry.name, prereq)
+  end
+
+  local icon = entry.is_homebrew and
+    require("dnd_generator.init").config.homebrew_icon .. " " or
+    require("dnd_generator.init").config.classic_icon .. " "
+
+  display_text = icon .. display_text
+
+  if entry.is_homebrew then
+    search_text = search_text .. " homebrew"
+  end
+
+  return {
+    value = entry,
+    display = display_text,
+    ordinal = search_text,
+  }
+end
+
 function M.find(endpoint)
   client.get_data(endpoint, function(api_items)
     pickers.new({}, {
@@ -547,12 +616,8 @@ function M.find(endpoint)
       finder = finders.new_table({
         results = require("dnd_generator.core.homebrew").merge_data(endpoint, api_items),
         entry_maker = function(entry)
-          return {
-            value = entry,
-            display = entry.name,
-            ordinal = entry.name,
-          }
-        end,
+          return entry_marker_function(entry, endpoint)
+        end
       }),
       sorter = conf.generic_sorter({}),
 

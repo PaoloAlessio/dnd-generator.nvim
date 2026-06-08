@@ -123,6 +123,7 @@ The plugin comes with the following default configuration
     unit = "ft", -- Choose between "m", "ft", "ft/m"
     lua_homebrew = false, -- By default
     default_names = true, -- By defaylt generate a short list of names and files in the folder of the names
+    names_files = { "child", "names", "male", "female" }, -- files from where the program expectes to find the names
 }
 ```
 
@@ -132,7 +133,7 @@ For *non-FreedomUnit-Users* like me, you can change the unit system:
 Wizzard of The Coast and Open5e use it
 - for all the others you can choose between `unit = "m"` and `unit = "ft/m"`
 >[!NOTE]
->the latter will display `15 ft. (4.5 m)`  
+>the latter will display `15 ft. (4.5 m)`
 
 #### Offline mode:
 The plugin by default downloads inside the cache from **Open5e** the categories visited by the user,
@@ -145,6 +146,10 @@ By setting it to `lua_homebrew = true` the plugin can read from `.lua` files
 >[!CAUTION]
 > BEWARE of what you download: `.lua` files are compiled, so it could contain malicious code,
 > always prefere `.json` files
+
+#### Names files:
+The plugin expectes to find the names of the NPCs in the `.txt` files named after the content of the
+table `names_files`, so it'll look for files such as `female.txt`, `male.txt`, `names.txt`...
 
 
 # RoadMap:
@@ -168,5 +173,3 @@ By setting it to `lua_homebrew = true` the plugin can read from `.lua` files
 - [ ] Random dices
 - [ ] generating directories workspace for campaign notes
 
-## License:
-This software 

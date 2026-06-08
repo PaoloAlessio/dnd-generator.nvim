@@ -40,5 +40,9 @@ vim.api.nvim_create_user_command('DNDClearCache', function ()
 end, {})
 
 vim.api.nvim_create_user_command('DNDSyncCache', function ()
+  if  require("dnd_generator.init").config.mode == "online" then
+    vim.notify("DND Generator: Chosen mode online, if you want to download Open5e files, change mode to \"offline\"", vim.log.levels.WARN)
+    return
+  end
   require("dnd_generator.core.commands").sync_cache()
 end, {})

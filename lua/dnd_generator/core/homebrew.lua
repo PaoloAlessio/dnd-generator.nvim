@@ -13,8 +13,13 @@ local function load_homebrew_files(folder)
     local content = table.concat(vim.fn.readfile(file), "\n")
     local ok, data = pcall(vim.json.decode, content)
     if ok and type(data) == "table" then
-      if data.name then table.insert(results, data)
-      else for _, item in ipairs(data) do table.insert(results, item) end end
+      if data.name then 
+        data.is_homebrew = true
+        table.insert(results, data)
+      else for _, item in ipairs(data) do
+        data.is_homebrew = true
+        table.insert(results, item)
+      end end
     else
       vim.notify("DND Generator: Error in file ".. file, vim.log.levels.WARN)
     end
@@ -28,8 +33,13 @@ local function load_homebrew_files(folder)
   for _, file in ipairs(lua_files) do
     local ok, data = pcall(dofile, file)
     if ok and type(data) == "table" then
-      if data.name then table.insert(results, data)
-      else for _, item in ipairs(data) do table.insert(results, item) end end
+      if data.name then 
+        data.is_homebrew = true
+        table.insert(results, data)
+      else for _, item in ipairs(data) do
+        data.is_homebrew = true
+        table.insert(results, item)
+      end end
     else
       vim.notify("DND Generator: Error in file ".. file, vim.log.levels.WARN)
     end

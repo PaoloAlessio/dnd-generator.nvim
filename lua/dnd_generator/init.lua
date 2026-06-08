@@ -40,6 +40,8 @@ M.config = {
   unit = "ft",
   lua_homebrew = false,
   default_names = true,
+  homebrew_icon = "",
+  classic_icon = "󰗪",
 }
 
 M.setup = function (opts)
