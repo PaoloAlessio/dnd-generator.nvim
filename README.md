@@ -118,7 +118,7 @@ this command empties the Cache directory
 This command empties and repopulate the Cache directory with all the `.json` file from **Open5e**
 
 ### Rolling Dices:
-```
+``` cmd
 :DNDRoll <quantity>d<dice>[+/-<modifier>] [adv/dis]
 ```
 #### Examples:
@@ -126,6 +126,12 @@ This command empties and repopulate the Cache directory with all the `.json` fil
 - `:DNDRoll 5d4+3` -> rolls 5 d4, sums them and adds 3 to the result
 - `:DNDRoll 1d20 adv` -> rolls 1 d20 twice, keeps the higher result
 - `:DNDRoll 2d20-1 dis` -> rolls a pool of 2 d20s twice, keeps the lower total, and subtracts 1
+
+### DND Init:
+``` cmd
+:DNDInit [<campaign name>]
+```
+This command generate an organized directory tree for taking notes for a D&D campaign
 
 ## Installation
 you can install this plugin using your favourite package manager.
@@ -146,11 +152,7 @@ you can install this plugin using your favourite package manager.
 ```
 
 ### Configuration:
-The plugin comes with the following default ## Contributing
-Pull requests are welcome! If you want to add new name lists, features or fix bugs, feel free to open an issue or submit a PR.
-
-## License
-Distributed under the MIT License. See `LICENSE` for more information.configuration
+The plugin comes with the following default configuration
 ```lua
 {
     mode = "offline", -- Choose between "offline" (local cache) or "online" (doesn't save from API)
@@ -167,6 +169,11 @@ Distributed under the MIT License. See `LICENSE` for more information.configurat
     author = "Your Name",  -- You can change it to your name so the !header snippet will adapt
 }
 ```
+## Contributing
+Pull requests are welcome! If you want to add new name lists, features or fix bugs, feel free to open an issue or submit a PR.
+
+## License
+Distributed under the MIT License. See `LICENSE` for more information.
 
 #### Measurement Unit:
 For *non-FreedomUnit-Users* like me, you can change the unit system:
@@ -213,7 +220,7 @@ table `names_files`, so it'll look for files such as `female.txt`, `male.txt`, `
     - [x] magic items
     - [x] HomeBrewing
 - [x] Random dices `:DNDRoll`
-- [ ] generating directories workspace for campaign notes
+- [x] generating directories workspace for campaign notes `:DNDInit`
 
 ## Contributing
 Pull requests are welcome! If you want to add new name lists, features or fix bugs, feel free to open an issue or submit a PR.
