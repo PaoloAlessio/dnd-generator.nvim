@@ -42,6 +42,8 @@ M.config = {
   default_names = true,
   homebrew_icon = "",
   classic_icon = "󰗪",
+  load_default_snippets = true,
+  author = "Your name",
 }
 
 M.setup = function (opts)
@@ -64,6 +66,21 @@ M.setup = function (opts)
   local contents = vim.fn.glob(M.config.names_dir .. "/*", false, true)
   if not (#contents > 0) and M.config.default_names then
     bootstrap_names(M.config.names_dir)
+  end
+
+  if M.config.load_default_snippets then
+    local has_luasnip, ls = pcall(require, "luasnip")
+    if has_luasnip then
+      require("luasnip.loader.from_lua").lazy_load({
+        paths = vim.api.nvim_get_runtime_file("snippets", false)
+      })
+    else
+      vim.notify("dnd_generator: LuaSnip not found, snippets not enabled", vim.log.levels.WARN)
+    end
+  end
+
+  if type(M.config.author) ~= "string" then
+    M.config.author = "Your name"
   end
 end
 

@@ -78,7 +78,7 @@ Generates a *Markdown* table of names from specified file:
 
 
 ``` cmd
-:GenName <path-to-file> [quantity]
+:GenName <path-to-file> [<quantity>]
 ```
 - `:GenName dwarf male 5` -> generates 5 male names for dwarfs
 
@@ -117,6 +117,16 @@ this command empties the Cache directory
 ```
 This command empties and repopulate the Cache directory with all the `.json` file from **Open5e**
 
+### Rolling Dices:
+```
+:DNDRoll <quantity>d<dice>[+/-<modifier>] [adv/dis]
+```
+#### Examples:
+- `:DNDRoll 3d6` -> rolls 3 d6 and sums the results
+- `:DNDRoll 5d4+3` -> rolls 5 d4, sums them and adds 3 to the result
+- `:DNDRoll 1d20 adv` -> rolls 1 d20 twice, keeps the higher result
+- `:DNDRoll 2d20-1 dis` -> rolls a pool of 2 d20s twice, keeps the lower total, and subtracts 1
+
 ## Installation
 you can install this plugin using your favourite package manager.
 **Lazy.nvim**
@@ -126,7 +136,8 @@ you can install this plugin using your favourite package manager.
     event = "VeryLazy",
     dependencies = {
         "nvim-lua/plenary.nvim",
-        "nvim-telescope/telescope.nvim"
+        "nvim-telescope/telescope.nvim",
+        "L3MON4D3/LuaSnip"
     },
     opts = {
         -- Configuration here
@@ -152,6 +163,8 @@ Distributed under the MIT License. See `LICENSE` for more information.configurat
     names_files = { "child", "names", "male", "female" }, -- files from where the program expectes to find the names
     homebrew_icon = "", -- icon for homebrew files
     classic_icon = "󰗪", -- icon for files from Open5e
+    load_default_snippets = true, -- By default, loads default snippets for takind notes on dnd campaigns for markdown
+    author = "Your Name",  -- You can change it to your name so the !header snippet will adapt
 }
 ```
 
@@ -184,7 +197,7 @@ table `names_files`, so it'll look for files such as `female.txt`, `male.txt`, `
 # RoadMap:
 - [x] Generates names `:GenName` 
 - [x] Generates NPCs `:GenNPC` 
-- [ ] Snippets for dnd
+- [x] Snippets for dnd
 - [x] Open5e + Telescope
     - [x] cache clear `:DNDClearCache`
     - [x] online only mode
@@ -199,7 +212,7 @@ table `names_files`, so it'll look for files such as `female.txt`, `male.txt`, `
     - [x] armor
     - [x] magic items
     - [x] HomeBrewing
-- [ ] Random dices
+- [x] Random dices `:DNDRoll`
 - [ ] generating directories workspace for campaign notes
 
 ## Contributing
