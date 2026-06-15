@@ -169,11 +169,6 @@ The plugin comes with the following default configuration
     author = "Your Name",  -- You can change it to your name so the !header snippet will adapt
 }
 ```
-## Contributing
-Pull requests are welcome! If you want to add new name lists, features or fix bugs, feel free to open an issue or submit a PR.
-
-## License
-Distributed under the MIT License. See `LICENSE` for more information.
 
 #### Measurement Unit:
 For *non-FreedomUnit-Users* like me, you can change the unit system:
