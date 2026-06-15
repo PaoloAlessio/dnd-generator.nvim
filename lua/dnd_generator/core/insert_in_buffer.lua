@@ -29,13 +29,11 @@ end
 
 function M.insert_names(names)
 	local names_table = tabulate(names)
-	local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-		vim.api.nvim_buf_set_text(0, row - 1 , col, row -1, col, names_table)
+		vim.api.nvim_put(names_table, "l", true, true)
 end
 
 function M.insert_npc(NPC_data)
-	local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-  vim.api.nvim_buf_set_text(0, row -1, col, row -1, col, NPC_data)
+  vim.api.nvim_put(NPC_data, "l", true, true)
 end
 
 return M

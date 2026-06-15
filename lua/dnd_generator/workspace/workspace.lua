@@ -7,7 +7,7 @@ function M.init_campaign(campaign_name)
 
     local safe_name = campaign_name:gsub("%s+", "_")
     local cwd = vim.fn.getcwd()
-    local base_path = cwd .. "/" .. safe_name
+    local base_path = vim.fs.joinpath(cwd, safe_name)
 
     local folders = {
         "Narrative",
@@ -19,11 +19,11 @@ function M.init_campaign(campaign_name)
     }
 
     for _, folder in ipairs(folders) do
-        vim.fn.mkdir(base_path .. "/" .. folder, "p")
+        vim.fn.mkdir(vim.fs.joinpath(base_path, folder), "p")
     end
 
     local function create_file(path, content)
-        local file = io.open(base_path .. "/" .. path, "w")
+        local file = io.open(vim.fs.joinpath(base_path, path), "w")
         if file then
             file:write(content)
             file:close()

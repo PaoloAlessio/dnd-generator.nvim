@@ -3,7 +3,7 @@ local curl = require("plenary.curl")
 local config = require("dnd_generator").config
 
 local function save_to_cache(filename, data)
-  local path = config.cache_dir .. "/" .. filename
+  local path = vim.fs.joinpath(config.cache_dir, filename)
   vim.fn.mkdir(config.cache_dir, "p")
   local file = io.open(path, "w")
   if file then
@@ -16,7 +16,7 @@ local function save_to_cache(filename, data)
 end
 
 local function read_from_cache(filename)
-  local path = config.cache_dir .. "/" .. filename
+  local path = vim.fs.joinpath( config.cache_dir, filename)
   local file = io.open(path, "r")
   if file then
     local content = file:read("*a")

@@ -3,6 +3,8 @@
 # DND GENERATOR 🎲 
 > by Paolo Alessio Pelliccia
 
+Neovim 0.10 or greater
+
 ## Introduction
 this plugin aim is to **generate** random NPC names, sorted by species, sub-species, sex and more.
 By default, it comes with a small list of fantasy and historical names, but it's designed to let

@@ -4,24 +4,27 @@ local config = require("dnd_generator").config
 local homebrew_dir = config.homebrew_dir
 
 local function load_homebrew_files(folder)
-  local path = homebrew_dir .. "/" .. folder
+  local path = vim.fs.joinpath(homebrew_dir, folder)
   vim.fn.mkdir(path, "p")
   local results = {}
 
-  local json_files = vim.fn.glob(path .. "/*.json", false, true)
+local json_files = vim.fn.glob(path .. "/*.json", false, true)
   for _, file in ipairs(json_files) do
     local content = table.concat(vim.fn.readfile(file), "\n")
     local ok, data = pcall(vim.json.decode, content)
+
     if ok and type(data) == "table" then
-      if data.name then 
+      if data.name then
         data.is_homebrew = true
         table.insert(results, data)
-      else for _, item in ipairs(data) do
-        data.is_homebrew = true
-        table.insert(results, item)
-      end end
+      else
+        for _, item in ipairs(data) do
+          item.is_homebrew = true
+          table.insert(results, item)
+        end
+      end
     else
-      vim.notify("DND Generator: Error in file ".. file, vim.log.levels.WARN)
+      vim.notify("DND Generator (HomeBrew) : Error in JSON file '" .. file .. "'", vim.log.levels.WARN)
     end
   end
 
@@ -29,19 +32,25 @@ local function load_homebrew_files(folder)
     return results
   end
 
-  local lua_files = vim.fn.glob(path .. "/*.lua", false, true)
+local lua_files = vim.fn.glob(path .. "/*.lua", false, true)
+
   for _, file in ipairs(lua_files) do
     local ok, data = pcall(dofile, file)
+
     if ok and type(data) == "table" then
-      if data.name then 
+      if data.name then
         data.is_homebrew = true
         table.insert(results, data)
-      else for _, item in ipairs(data) do
-        data.is_homebrew = true
-        table.insert(results, item)
-      end end
+      else
+        for _, item in ipairs(data) do
+          item.is_homebrew = true
+          table.insert(results, item)
+        end
+      end
     else
-      vim.notify("DND Generator: Error in file ".. file, vim.log.levels.WARN)
+      -- Estrae solo il nome del file (es: "boss.lua") invece di tutto il percorso
+      vim.notify("DND Generator (HomeBrew) : Error in LUA file '" .. file .. "' does not contain a valid structure."
+      , vim.log.levels.WARN)
     end
   end
 

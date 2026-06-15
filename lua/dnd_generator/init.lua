@@ -16,7 +16,7 @@ local function bootstrap_names(names_dir)
   }
 
   for file_path, content in pairs(default_names) do
-    local full_path = names_dir .. "/" .. file_path
+    local full_path = vim.fs.normalize(vim.fs.joinpath(names_dir, file_path))
     local folder_path = vim.fn.fnamemodify(full_path, ":h")
 
     vim.fn.mkdir(folder_path, "p")
@@ -34,9 +34,9 @@ end
 M.config = {
   names_files = { "child", "names", "male", "female" },
   mode = "offline",
-  cache_dir = vim.fn.stdpath("cache") .. "/dnd_generator/open5e",
-  homebrew_dir = vim.fn.stdpath("data") .. "/dnd_generator/homebrew",
-  names_dir = vim.fn.stdpath("data") .. "/dnd_generator/names",
+  cache_dir = vim.fs.joinpath(vim.fn.stdpath("cache"), "dnd_generator","open5e"),
+  homebrew_dir = vim.fs.joinpath(vim.fn.stdpath("data"), "dnd_generator", "homebrew"),
+  names_dir = vim.fs.joinpath(vim.fn.stdpath("data"), "dnd_generator","names"),
   unit = "ft",
   lua_homebrew = false,
   default_names = true,
@@ -51,9 +51,9 @@ M.setup = function (opts)
 
   M.config = vim.tbl_deep_extend("force", M.config, opts)
 
-  M.config.cache_dir = vim.fn.expand(M.config.cache_dir)
-  M.config.homebrew_dir = vim.fn.expand(M.config.homebrew_dir)
-  M.config.names_dir = vim.fn.expand(M.config.names_dir)
+  M.config.cache_dir = vim.fs.normalize( vim.fn.expand(M.config.cache_dir))
+  M.config.homebrew_dir = vim.fs.normalize(vim.fn.expand(M.config.homebrew_dir))
+  M.config.names_dir = vim.fs.normalize(vim.fn.expand(M.config.names_dir))
 
   if M.config.mode == "offline" then
     if vim.fn.isdirectory(M.config.cache_dir) == 0 then
@@ -69,9 +69,9 @@ M.setup = function (opts)
   end
 
   if M.config.load_default_snippets then
-    local has_luasnip, ls = pcall(require, "luasnip")
+    local has_luasnip, _ = pcall(require, "luasnip")
     if has_luasnip then
-      require("luasnip.loader.from_lua").lazy_load({
+      require("luasnip.loaders.from_lua").lazy_load({
         paths = vim.api.nvim_get_runtime_file("snippets", false)
       })
     else

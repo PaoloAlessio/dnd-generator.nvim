@@ -82,7 +82,7 @@ vim.api.nvim_create_user_command('DNDInit', function(opts)
     require("dnd_generator.workspace").init_campaign(campaign_name)
 
     local safe_name = campaign_name:gsub("%s+", "_")
-    local index_path = vim.fn.getcwd() .. "/" .. safe_name .. "/index.md"
+    local index_path =vim.fs.joinpath( vim.fn.getcwd(), safe_name, "index.md")
     vim.cmd("edit " .. index_path)
 
 end, {

@@ -16,7 +16,7 @@ local function load_tree(dir_path)
     if not handler_name then
       break
     end
-    local full_path = dir_path .. "/" .. handler_name
+    local full_path = vim.fs.joinpath(dir_path, handler_name)
     if handler_type == "directory" then
       tree[handler_name]= {
         name = handler_name,
