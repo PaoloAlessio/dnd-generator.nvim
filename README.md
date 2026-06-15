@@ -1,5 +1,3 @@
-<h1> WORK IN PROGRESS ⚠️</h1>
-
 # DND GENERATOR 🎲 
 > by Paolo Alessio Pelliccia
 
